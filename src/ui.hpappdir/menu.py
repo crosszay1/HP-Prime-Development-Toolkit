@@ -50,7 +50,16 @@ while True:
   try:
     draw_menu(VISIBLE=VISIBLE, MENU=MENU)
 
-    key = eval('getkey')
+    # Poll for a key for up to ~1s so the clock refreshes once per second
+    key = -1
+    for _ in range(20):
+      key = eval('getkey')
+      if key != -1:
+        break
+      eval('wait(0.05)')
+
+    if key == -1:
+      continue
 
     # UP
     if key == 2:

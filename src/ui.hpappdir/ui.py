@@ -50,8 +50,27 @@ class UI:
     # Clear screen
     dimgrob(1, 320, 240, 0xFFFFFF)
 
-    # Draw title
+    # Draw title and current time (HP Prime Time is HH.MMSS)
     eval('textout_p("Dev Menu",G1,10,8,6,#000000)')
+
+    time = eval("Time")
+    hours = int(time)
+    minutes_float = (time - hours) * 60
+    minutes = int(minutes_float)
+    seconds = int((minutes_float - minutes) * 60 + 0.5)
+
+    if seconds >= 60:
+        seconds = 0
+        minutes += 1
+
+    if minutes >= 60:
+        minutes = 0
+        hours = (hours + 1) % 24
+
+    h_str = str(hours) if hours >= 10 else "0" + str(hours)
+    m_str = str(minutes) if minutes >= 10 else "0" + str(minutes)
+    s_str = str(seconds) if seconds >= 10 else "0" + str(seconds)
+    eval('textout_p("' + h_str + ":" + m_str + ":" + s_str + '",G1,130,12,4,#000000)')
 
     # Draw menu items
     for i in range(VISIBLE):
