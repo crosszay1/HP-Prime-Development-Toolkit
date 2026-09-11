@@ -25,24 +25,51 @@ class UI:
 
   @staticmethod
   def sendNotification(message: str): # Sends notifcations. 
-    while eval('getkey') != -1: #Wait till enter is released or we'll immediately close the popup
-      pass
+      while eval('getkey') != -1: #Wait till enter is released or we'll immediately close the popup
+        pass
 
-    # Draw the popup background
-    # fillrect(grob, x, y, width, height, edge_color, fill_color)
-    fillrect(1, 60, 90, 200, 60, 0x000000, 0xEEEEEE)
-    
-    # Write text
-    msg = message
-    eval('textout_p("' + str(msg) + '",G1,75,100,4,#000000)')
-    eval('textout_p("Press any key to dismiss",G1,75,125,2,#555555)')
-    
-    #Push the buffer to the screen
-    blit(0, 0, 0, 1)
+      # Wrap text
+      max_chars = 25 # Guesstimated this.
+      words = message.split(" ")
+      lines = []
+      line = ""
 
-    # Close when use presses a key
-    while eval('getkey') == -1:
-      pass
+      for word in words:
+        if len(line) + len(word) + 1 <= max_chars:
+          if line:
+            line += " "
+          line += word
+        else:
+          lines.append(line)
+          line = word
+
+      if line:
+        lines.append(line)
+
+      # Calculate popup height
+      line_height = 15
+      box_height = 45 + (len(lines) * line_height)
+
+      # Draw the popup background
+      # fillrect(grob, x, y, width, height, edge_color, fill_color)
+      fillrect(1, 60, 90, 200, box_height, 0x000000, 0xEEEEEE)
+      
+      # Write text
+      y = 100
+
+      for line in lines:
+        eval('textout_p("' + str(line) + '",G1,75,' + str(y) + ',4,#000000)')
+        y += line_height
+
+      eval('textout_p("Press any key to dismiss",G1,75,' + str(y + 5) + ',2,#555555)')
+      
+      #Push the buffer to the screen
+      blit(0, 0, 0, 1)
+
+      # Close when use presses a key
+      while eval('getkey') == -1:
+        pass
+
 
   @staticmethod
   def draw_menu(VISIBLE, MENU):
