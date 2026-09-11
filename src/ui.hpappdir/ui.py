@@ -79,7 +79,7 @@ class UI:
       if index >= len(MENU):
         break
 
-      y = 25 + i * 20 # Difference in y position for each item
+      y = 30 + i * 20 # Difference in y position for each item
       item = MENU[index]
 
       # Highlight selected item
